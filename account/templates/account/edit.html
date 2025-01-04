@@ -1,0 +1,54 @@
+{% extends 'account/base.html' %}
+
+{% block content %}
+   <div class="container mx-auto p-4"> 
+        <h1 class="text-2xl font-bold mb-4">Edit Student</h1> 
+        <form method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"> {% csrf_token %} 
+            <div class="mb-4"> 
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="first_name">First Name</label> 
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="first_name" name="first_name" type="text" value="{{ student.first_name }}">
+             </div>
+             <div class="mb-4"> 
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="last_name">Last Name</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="last_name" name="last_name" type="text" value="{{ student.last_name }}"> 
+            </div>
+             <div class="mb-4"> <label class="block text-gray-700 text-sm font-bold mb-2" for="roll_no">Roll No</label>
+                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="roll_no" name="roll_no" type="text" value="{{ student.roll_no }}">
+             </div>
+              <div class="mb-4"> 
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="department">Department</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="department" name="department" type="text" value="{{ student.department }}"> 
+            </div>
+             <div class="mb-4">
+                 <label class="block text-gray-700 text-sm font-bold mb-2" for="batch">Batch</label> 
+                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="batch" name="batch" type="text" value="{{ student.batch }}"> 
+            </div>
+             <div class="mb-4">
+                 <label class="block text-gray-700 text-sm font-bold mb-2" for="section">Section</label> 
+                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="section" name="section" type="text" value="{{ student.section }}">
+            </div> 
+            <div class="mb-4">
+                     <label class="block text-gray-700 text-sm font-bold mb-2" for="semester">Semester</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="semester" name="semester" type="text" value="{{ student.semester }}">
+            </div>
+            <div class="mb-4"> 
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="cgpa">CGPA</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="cgpa" name="cgpa" type="text" value="{{ student.cgpa }}">
+            </div> 
+
+            <div class="mb-4">
+             <label class="block text-gray-700 text-sm font-bold mb-2" for="dropout">Dropout</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="dropout" name="dropout" type="text" value="{{ student.dropout }}"> 
+        </div> 
+        <div class="mb-4">
+             <label class="block text-gray-700 text-sm font-bold mb-2" for="dropout_reason">Dropout Reason</label>
+             <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="dropout_reason" name="dropout_reason" type="text" value="{{ student.dropout_reason }}"> 
+        </div> 
+        <div class="flex items-center justify-between"> 
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">Save</button>
+            <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="{% url 'students' %}">Cancel</a>
+         </div> 
+        </form>
+ </div>
+
+{% endblock %}

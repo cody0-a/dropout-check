@@ -1,0 +1,20 @@
+{% extends 'account/base.html'%}
+
+{% block content %}
+    <div class="flex justify-center items-center h-screen">
+        <form method="POST" class="bg-white p-8 rounded shadow-md w-96 border border-gray-300 mx-auto mt-20">
+            {% csrf_token %}
+            <h1 class="text-2xl font-bold mb-4 text-blue-500 text-center">Login for Korax</h1>
+            <div class="mb-4">
+                <label for="username" class="block text-sm font-bold mb-2">Username</label>
+                <input type="text" name="username" id="username" required class="border rounded w-full py-2 px-3 focus:outline-none focus:border-blue-500">
+            </div>
+            <div class="mb-4">
+                <label for="password" class="block text-sm font-bold mb-2">Password</label>
+                <input type="password" name="password" id="password" required class="border rounded w-full py-2 px-3 focus:outline-none focus:border-blue-500">
+            </div>
+            <button type="submit" class="login bg-blue-500 text-white py-2 px-4 rounded" id="login">Login</button>
+        </form>
+    </div>
+
+{% endblock %}

@@ -119,3 +119,4 @@ class DropoutSummary(models.Model):
 
     def __str__(self):
         return "Dropout Summary"
+    

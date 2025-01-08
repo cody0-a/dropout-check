@@ -1,0 +1,39 @@
+{% extends 'account/base.html' %}
+
+{% block content %}
+    <div class="container mx-auto py-8 flex flex-col items-center md:flex-row lg:block">
+        <h1 class="text-2xl font-bold mb-6">Ethiopia Student</h1>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-200">
+                <thead>
+                    <tr  class="flex flex-col md:flex-row border-b border-gray-200 ">
+                        <th class="py-2 px-4 border-b border-gray-200">Student ID</th>
+                        <th class="py-2 px-4 border-b border-gray-200">Student Name</th>
+                        <th class="py-2 px-4 border-b border-gray-200">Student Email</th>
+                        <th class="py-2 px-4 border-b border-gray-200">Student Phone</th>
+                        <th class="py-2 px-4 border-b border-gray-200">Student Age</th>
+                        <th class="py-2 px-4 border-b border-gray-200">Student Average</th>
+                        <th class="py-2 px-4 border-b border-gray-200">Student Type</th>
+                        <th class="py-2 px-4 border-b border-gray-200">Drop Out</th>
+                        <th class="py-2 px-4 border-b border-gray-200">Student Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                        <tr class="flex flex-col md:flex-row lg:flex-row">
+                            <td class="py-2 px-4 border-b border-gray-200">{{ student.student_id }}</td>
+                            <td class="py-2 px-4 border-b border-gray-200">{{ student.student_name }}</td>
+                            <td class="py-2 px-4 border-b border-gray-200">{{ student.email }}</td>
+                            <td class="py-2 px-4 border-b border-gray-200">{{ student.phone }}</td>
+                            <td class="py-2 px-4 border-b border-gray-200">{{ student.age }}</td>
+                            <td class="py-2 px-4 border-b border-gray-200">{{ student.average }}</td>
+                            <td class="py-2 px-4 border-b border-gray-200">{{ student.student_type }}</td>
+                            <td class="py-2 px-4 border-b border-gray-200">{{ student.drop_out }}</td>
+                            <td class="py-2 px-4 border-b border-gray-200">{{ student.address }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

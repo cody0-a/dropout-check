@@ -1,0 +1,17 @@
+{% extends 'account/base.html' %}
+
+{% block content %}
+    <div class="flex flex-row justify-center items-center border border-blue-500 shadow-ms ">
+        {% if categories %}
+        <ul >
+            {% for category in categories %}
+            <li>
+                <a href="{% url 'categories' category.id%}"></a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="text-center">Categories  Not Found!</p>
+        {% endif %}
+    </div>
+    {% endblock %}

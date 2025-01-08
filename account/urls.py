@@ -1,7 +1,11 @@
 from django.urls import path
 from . import views
+from django.conf.urls import handler400
+
+
 urlpatterns = [
     path('', views.home, name='home'),
+    path('add/', views.create_student, name='add'),
     path('login/', views.login_view, name='login'),
     path('register/',views.register,name='register'),
     path('category/',views.get_categories,name='category'),

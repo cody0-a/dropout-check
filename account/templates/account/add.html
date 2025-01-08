@@ -1,0 +1,76 @@
+{% extends 'account/base.html' %}
+
+{% block content %}
+<div class="mx-auto w-full bg-gray-200 p-6 overflow-y-auto"> 
+    <h2 class="text-xl font-bold text-center mb-2 mt-2">Add Student</h2>
+    <form method="POST" class="bg-white shadow-md rounded-lg p-6">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label for="first_name" class="block text-sm font-medium text-gray-700">First Name:</label>
+            <input type="text" id="first_name" name="first_name" required
+                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 outline-none focus:outline-none p-2">
+        </div>
+        
+        <div class="mb-4">  
+            <label for="last_name" class="block text-sm font-medium text-gray-700">Last Name:</label>
+            <input type="text" id="last_name" name="last_name" required
+                   class="mt-1 block w-full border-gray-300 rounded-md outline-none focus:outline-none p-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
+        </div>
+        
+        <div class="mb-4">
+            <label for="roll_no" class="block text-sm font-medium text-gray-700">Roll No:</label>
+            <input type="text" id="roll_no" name="roll_no" required
+                   class="mt-1 block w-full border-gray-300 outline-none focus:outline-none p-2 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
+        </div>
+        
+        <div class="mb-4">
+            <label for="department" class="block text-sm font-medium text-gray-700">Department:</label>
+            <input type="text" id="department" name="department" required
+                   class="mt-1 block w-full border-gray-300 outline-none focus:outline-none p-2 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
+        </div>
+        
+        <div class="mb-4">
+            <label for="batch" class="block text-sm font-medium text-gray-700">Batch:</label>
+            <input type="text" id="batch" name="batch" required
+                   class="mt-1 block w-full border-gray-300 outline-none focus:outline-none p-2 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
+        </div>
+        
+        <div class="mb-4">
+            <label for="section" class="block text-sm font-medium text-gray-700">Section:</label>
+            <input type="text" id="section" name="section" required
+                   class="mt-1 block w-full border-gray-300 outline-none focus:outline-none p-2 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
+        </div>
+        
+        <div class="mb-4">
+            <label for="semester" class="block text-sm font-medium text-gray-700">Semester:</label>
+            <input type="number" id="semester" name="semester" required
+                   class="mt-1 block w-full border-gray-300 outline-none focus:outline-none p-2 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
+        </div>
+        
+        <div class="mb-4">
+            <label for="cgpa" class="block text-sm font-medium text-gray-700">CGPA:</label>
+            <input type="number" step="0.01" id="cgpa" name="cgpa" required
+                   class="mt-1 block w-full border-gray-300 outline-none focus:outline-none p-2 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
+        </div>
+        
+        <div class="mb-4">
+            <label for="dropout" class="block text-sm font-medium text-gray-700">Dropout:</label>
+            <select id="dropout" name="dropout"
+                    class="mt-1 block w-full border-gray-300 outline-none focus:outline-none p-2 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
+                <option value="False">No</option>
+                <option value="True">Yes</option>
+            </select>
+        </div>
+        
+        <div class="mb-4">
+            <label for="dropout_reason" class="block text-sm font-medium text-gray-700">Dropout Reason:</label>
+            <input type="text" id="dropout_reason" name="dropout_reason"
+                   class="mt-1 block w-full border-gray-300 outline-none focus:outline-none p-2 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
+        </div>
+        
+        <button type="submit" class="w-full bg-blue-500 text-white font-bold py-2 rounded hover:bg-blue-600">
+            Add Student
+        </button>
+    </form>
+</div>
+{% endblock %}

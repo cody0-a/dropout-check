@@ -13,8 +13,7 @@ SECRET_KEY = 'django-insecure-+@)_sz#siyuy^lm$$^gtqlgxh1gsyck2m3%!kvr&dh47geud8r
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -33,6 +32,10 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'account.middleware.CustomExceptionMiddleware',
+    'account.middleware.MethodNotAllowedMiddleware',
+    'account.middleware.PageNotFoundMiddleware',
+    'account.middleware.ForbiddenMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -114,7 +117,7 @@ AUTH_USER_MODEL = 'account.CustomUser'
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+    os.path.join(BASE_DIR, 'account\\static')
 ]
 
 # Default primary key field type

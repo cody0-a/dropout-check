@@ -441,19 +441,19 @@ def deactivate_account(request):
 @permission_required('account.can_view_student', raise_exception=True)
 def view_students(request):
     students = Student.objects.all()
-    return render(request, 'student/view.html', {'students': students})
+    return render(request, 'account/view.html', {'students': students})
 
 @login_required
 @permission_required('account.can_view_student', raise_exception=True)
 def get_students(request):
     students = Student.objects.all()
-    return render(request, 'student/students.html', {'students': students})
+    return render(request, 'account/students.html', {'students': students})
 
 @login_required
 @permission_required('account.can_view_student', raise_exception=True)
 def get_student(request, student_id):
     student = Student.objects.get(id=student_id)
-    return render(request, 'student/student.html', {'student': student})
+    return render(request, 'account/student.html', {'student': student})
 
 @login_required
 @permission_required('account.can_add_student', raise_exception=True)
@@ -461,7 +461,7 @@ def create_student(request):
     if request.method == 'POST':
         # Add student logic here
         return redirect('students')
-    return render(request, 'student/add.html')
+    return render(request, 'account/add.html')
 
 @login_required
 @permission_required('account.can_change_student', raise_exception=True)
@@ -470,7 +470,7 @@ def update_student(request, student_id):
     if request.method == 'POST':
         # Update logic here
         return redirect('students')
-    return render(request, 'student/edit.html', {'student': student})
+    return render(request, 'account/edit.html', {'student': student})
 
 @login_required
 @permission_required('account.can_delete_student', raise_exception=True)
@@ -479,12 +479,12 @@ def delete_student(request, student_id):
     if request.method == 'POST':
         student.delete()
         return redirect('students')
-    return render(request, 'student/delete.html', {'student': student})
+    return render(request, 'account/delete.html', {'student': student})
 
 @login_required
 @permission_required('account.can_view_student', raise_exception=True)
 def get_categories(request):
-    return render(request, 'student/categories.html')
+    return render(request, 'account/categories.html')
 
 
 def get_settings(request):
@@ -495,7 +495,7 @@ def get_dropout_rate(request):
     total_students = summary.total_students
     total_dropouts = summary.total_dropouts
     dropout_rate = (total_dropouts / total_students) * 100 if total_students else 0
-    return render(request, 'student/dropout_rate.html', {'dropout_rate': dropout_rate})
+    return render(request, 'account/dropout_rate.html', {'dropout_rate': dropout_rate})
 
 @login_required
 def categorize_students(request):
@@ -516,7 +516,7 @@ def categorize_students(request):
             dropout_reason = student.dropout_reason if student.dropout_reason else "Other"
             dropout_reasons[dropout_reason].append(student)
 
-    return render(request, 'student/categorized_students.html', {'dropout_reasons': dropout_reasons})
+    return render(request, 'account/categorized_students.html', {'dropout_reasons': dropout_reasons})
 
 
 @login_required
@@ -549,4 +549,47 @@ def edit_student(request, student_id):
         student.save()
 
         return redirect('students')
-    return render(request, 'student/edit.html', {'student': student})
+    return render(request, 'account/edit.html', {'student': student})
+
+
+@login_required
+@permission_required('account.can_add_student', raise_exception=True)
+def create_student(request):
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        roll_no = request.POST.get('roll_no')
+        department = request.POST.get('department')
+        batch = request.POST.get('batch')
+        section = request.POST.get('section')
+        semester = request.POST.get('semester')
+        cgpa = request.POST.get('cgpa')
+        dropout = request.POST.get('dropout')
+        dropout_reason = request.POST.get('dropout_reason')
+        student = Student.objects.create(
+            first_name=first_name,
+            last_name=last_name,
+            roll_no=roll_no,
+            department=department,
+            batch=batch,
+            section=section,
+            semester=semester,
+            cgpa=cgpa,
+            dropout=dropout,
+            dropout_reason=dropout_reason
+        )
+        return redirect('students')
+    return render(request, 'account/add.html')
+
+
+def custom_server_error_view(request):
+    return render(request, '500.html', status=500)
+
+def custom_method_not_allowed_view(request, exception): 
+    return render(request, '405.html', status=405)
+
+def custom_page_not_found_view(request, exception):
+    return render(request, '404.html', status=404)
+
+def custom_forbidden_view(request, exception): 
+    return render(request, 'account/403.html', status=403)

@@ -29,6 +29,7 @@ urlpatterns = [
     path('students/download/', views.download_students, name='download_students'),
     path('reports/', views.get_reports, name='reports'),
     path('users/', views.get_registered_users, name='users'),
+    path('dashboard/',views.dashboard,name='dashboard'),
     path('settings/', views.get_settings, name='settings'),
     path('dropout_rate/', views.get_dropout_rate, name='dropout_rate'),
     path('categorized-students/', views.categorize_students, name='categorized_students'),

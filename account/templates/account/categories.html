@@ -1,17 +1,23 @@
 {% extends 'account/base.html' %}
 
+
 {% block content %}
-    <div class="flex flex-row justify-center items-center border border-blue-500 shadow-ms ">
+<div class="flex flex-col items-center mt-6 centered-content">
+    <h2 class="text-2xl font-bold text-blue-600 mb-4">Categories</h2>
+    <div class="flex flex-row justify-center items-center border border-blue-500 shadow-lg rounded-lg p-4">
         {% if categories %}
-        <ul >
+        <ul class="flex space-x-4">
             {% for category in categories %}
             <li>
-                <a href="{% url 'categories' category.id%}"></a>
+                <a href="{% url 'categories' category.id %}" class="bg-blue-500 text-white hover:bg-blue-600 rounded-lg px-4 py-2 transition duration-200 transform hover:scale-105">
+                    {{ category.name }}
+                </a>
             </li>
             {% endfor %}
         </ul>
         {% else %}
-        <p class="text-center">Categories  Not Found!</p>
+        <p class="text-center text-gray-700">Categories Not Found!</p>
         {% endif %}
     </div>
-    {% endblock %}
+</div>
+{% endblock %}

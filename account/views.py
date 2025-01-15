@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, permission_required
-from .models import *
+from .models import * 
+from .models import UserProfile
+from django.contrib import messages
 User = get_user_model()
 
 def home(request):
@@ -22,10 +24,7 @@ def login_view(request):
             return render(request, 'account/login.html', {'error': 'Invalid credentials'})
     return render(request, 'account/login.html')
 
-from django.shortcuts import render, redirect
-from django.contrib.auth import get_user_model, login
-from .models import UserProfile
-from django.contrib import messages
+
 
 def register(request):
     if request.method == 'POST':
@@ -155,6 +154,10 @@ def register_student(request):
 def dropout_summary(request):
     summary = DropoutSummary.objects.first()
     return render(request, 'student/dropout_summary.html', {'summary': summary})
+
+
+def dashboard(request):
+    return render(request, 'account/dashboard.html')
 
 
 def categorize_students(request):
@@ -523,8 +526,6 @@ def categorize_students(request):
 @permission_required('account.can_edit_student', raise_exception=True)
 def edit_student(request, student_id):
     student = Student.objects.get(id=student_id)
-    user = get_user_model()
-    student.user = user
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -536,8 +537,9 @@ def edit_student(request, student_id):
         cgpa = request.POST.get('cgpa')
         dropout = request.POST.get('dropout')
         dropout_reason = request.POST.get('dropout_reason')
-        student.first_name = first_name
-        student.last_name= last_name
+        
+        student.user.first_name = first_name
+        student.user.last_name= last_name
         student.roll_no = roll_no
         student.department = department
         student.batch = batch
@@ -555,6 +557,11 @@ def edit_student(request, student_id):
 @login_required
 @permission_required('account.can_add_student', raise_exception=True)
 def create_student(request):
+    # Retrieve all DropOut records to display in the form
+    dropout_rsn_list = DropOut.objects.all()
+    dropout_cases = DropOut._meta.get_field('DropOut_case').choices
+    print(dropout_cases)
+
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -566,6 +573,8 @@ def create_student(request):
         cgpa = request.POST.get('cgpa')
         dropout = request.POST.get('dropout')
         dropout_reason = request.POST.get('dropout_reason')
+
+        # Create the student object
         student = Student.objects.create(
             first_name=first_name,
             last_name=last_name,
@@ -578,10 +587,17 @@ def create_student(request):
             dropout=dropout,
             dropout_reason=dropout_reason
         )
+
+        # If dropout is selected, link the student to the DropOut record
+        if dropout and dropout_reason:
+            dropout_instance = get_object_or_404(DropOut, id=dropout_reason)  # Assuming dropout_reason is the ID of DropOut
+            dropout_instance.student = student  # Link the student to the DropOut
+            dropout_instance.save()
+
         return redirect('students')
-    return render(request, 'account/add.html')
 
-
+    return render(request, 'account/add.html', {'dropout_rsn_list': dropout_rsn_list,
+        'dropout_cases': dropout_cases})
 def custom_server_error_view(request):
     return render(request, '500.html', status=500)
 
@@ -593,3 +609,10 @@ def custom_page_not_found_view(request, exception):
 
 def custom_forbidden_view(request, exception): 
     return render(request, 'account/403.html', status=403)
+
+
+def custom_permission_denied(request,exception):
+    return render(request,'account/403.html', { 'error':"server is undermaintence. sorry for unconvinience"} ,status=403)
+
+
+    

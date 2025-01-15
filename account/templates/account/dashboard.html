@@ -1,0 +1,53 @@
+{% extends 'account/base.html' %}
+
+{% block content %}
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-bold mb-6 text-center  ">Admin Dashboard</h1>
+
+        <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Dropout Statistics</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="flex flex-col border border-gray-300 p-4">
+                    <span class="font-medium">Total Students</span>
+                    <span>{{ total_students }}</span>
+                </div>
+                <div class="flex flex-col border border-gray-300 p-4">
+                    <span class="font-medium">Currently Enrolled</span>
+                    <span>{{ enrolled_students }}</span>
+                </div>
+                <div class="flex flex-col border border-gray-300 p-4">
+                    <span class="font-medium">Dropouts This Semester</span>
+                    <span>{{ dropouts_this_semester }}</span>
+                </div>
+                <div class="flex flex-col border border-gray-300 p-4">
+                    <span class="font-medium">Overall Dropout Rate</span>
+                    <span>{{ dropout_rate }}%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Admin Actions</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="flex space-x-4">
+                    <button type="submit" name="check_dropout" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Check Dropout Status</button>
+                    <button type="submit" name="send_notifications" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Send Notifications</button>
+                    <button type="submit" name="generate_reports" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Generate Reports</button>
+                    <button type="submit" name="manage_students" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Manage Students</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Recent Admin Activity</h2>
+            <ul class="list-disc pl-5">
+                {% for activity in recent_activities %}
+                    <li>{{ activity.timestamp }} - {{ activity.description }}</li>
+                {% empty %}
+                    <li>No recent activities.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

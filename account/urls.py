@@ -36,5 +36,5 @@ urlpatterns = [
     path('categorized-students/', views.categorize_students, name='categorized_students'),
     path('edit-student/', views.edit_student, name='edit_student'),
     path('logout/', views.logout_view, name='logout'),
-    path('upload/',views.upload_file2,name='upload-file')
+    path('upload/',views.upload_file2,name='upload-file'),
 ]

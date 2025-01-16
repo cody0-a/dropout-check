@@ -648,4 +648,4 @@ def upload_file(request):
 
 
 def upload_file2(request):
-    return render(request,'account/base.html')
+    return render(request,'account/upload.html')

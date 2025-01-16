@@ -1,9 +1,12 @@
+import openpyxl
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, permission_required
 from .models import * 
 from .models import UserProfile
+from .forms import * 
+from django.http import HttpResponse
 from django.contrib import messages
 User = get_user_model()
 
@@ -149,11 +152,7 @@ def register_student(request):
         # Redirect or render as necessary
         return redirect('home')
 
-    return render(request, 'student/register.html')
-
-def dropout_summary(request):
-    summary = DropoutSummary.objects.first()
-    return render(request, 'student/dropout_summary.html', {'summary': summary})
+    return render(request, 'account/register.html')
 
 
 def dashboard(request):
@@ -178,7 +177,7 @@ def categorize_students(request):
             dropout_reason = student.dropout_reason if student.dropout_reason else "Other"
             dropout_reasons[dropout_reason].append(student)
 
-    return render(request, 'student/categorized_students.html', {'dropout_reasons': dropout_reasons})
+    return render(request, 'account/categorized_students.html', {'dropout_reasons': dropout_reasons})
 
 
 
@@ -188,7 +187,7 @@ def register_student(request):
     if request.method == 'POST':
         # Registration logic here
         return redirect('some_view')
-    return render(request, 'student/register.html')
+    return render(request, 'account/register.html')
 
 @login_required
 @permission_required('account.can_change_student', raise_exception=True)
@@ -197,7 +196,7 @@ def edit_student(request, student_id):
     if request.method == 'POST':
         # Update logic here
         return redirect('some_view')
-    return render(request, 'student/edit.html', {'student': student})
+    return render(request, 'account/edit.html', {'student': student})
 
 @login_required
 @permission_required('account.can_delete_student', raise_exception=True)
@@ -206,41 +205,41 @@ def delete_student(request, student_id):
     if request.method == 'POST':
         student.delete()
         return redirect('get_students')
-    return render(request, 'student/delete.html', {'student': student})
+    return render(request, 'account/delete.html', {'student': student})
 
 
 @login_required
 @permission_required('account.can_view_student', raise_exception=True)
 def view_students(request):
     students = Student.objects.all()
-    return render(request, 'student/view.html', {'students': students})
+    return render(request, 'account/view.html', {'students': students})
 
 
 @login_required
 @permission_required('account.can_view_student', raise_exception=True)
 def view_student(request, student_id):
     student = Student.objects.get(id=student_id)
-    return render(request, 'student/view.html', {'student': student})
+    return render(request, 'account/view.html', {'student': student})
 
 @login_required
 @permission_required('account.can_view_student', raise_exception=True)
 def search_student(request):
     query = request.GET.get('query')
     students = Student.objects.filter(roll_no__icontains=query)
-    return render(request, 'student/search.html', {'students': students})
+    return render(request, 'account/search.html', {'students': students})
 
 @login_required
 @permission_required('account.can_view_student', raise_exception=True)
 def filter_student(request):
     department = request.GET.get('department')
     students = Student.objects.filter(department=department)
-    return render(request, 'student/filter.html', {'students': students})
+    return render(request, 'account/filter.html', {'students': students})
 
 @login_required
 @permission_required('account.can_view_student', raise_exception=True)
 def sort_student(request):
     students = Student.objects.all().order_by('roll_no') 
-    return render(request, 'student/sort.html', {'students': students})
+    return render(request, 'account/sort.html', {'students': students})
 
 @login_required
 @permission_required('account.can_view_student', raise_exception=True)
@@ -255,7 +254,7 @@ def import_students(request):
     if request.method == 'POST':
         # Import logic here
         return redirect('students')
-    return render(request, 'student/import.html')
+    return render(request, 'account/import.html')
 
 @login_required
 @permission_required('account.can_view_student', raise_exception=True)
@@ -263,7 +262,7 @@ def upload_students(request):
     if request.method == 'POST':
         # Upload logic here
         return redirect('home')
-    return render(request, 'student/upload.html')
+    return render(request, 'account/upload.html')
 
 @login_required
 @permission_required('account.can_view_student', raise_exception=True)
@@ -615,4 +614,34 @@ def custom_permission_denied(request,exception):
     return render(request,'account/403.html', { 'error':"server is undermaintence. sorry for unconvinience"} ,status=403)
 
 
+def dropout_summary(request):
+    return render(request, 'account/dropout_summary.html')
+
+def upload_file(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            file = request.FILES['file']
+            wb = openpyxl.load_workbook(file)
+            sheet = wb.active
+            
+            for row in sheet.iter_rows(min_row=2, values_only=True):  # Skip header row
+                # Assuming the columns are in order: Username, Dropout Reason, Dropout Case
+                username, reason, dropout_case = row
+                
+                try:
+                    student = Student.objects.get(user__username=username)
+                    DropOut.objects.create(
+                        student=student,
+                        reason=reason,
+                        DropOut_case=dropout_case
+                    )
+                except Student.DoesNotExist:
+                    # Handle case where student is not found
+                    print(f"Student with username {username} does not exist.")
+            
+            return HttpResponse("Data uploaded successfully.")
+    else:
+        form = UploadFileForm()
     
+    return render(request, 'upload.html', {'form': form})

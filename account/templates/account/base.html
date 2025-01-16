@@ -33,70 +33,17 @@
             background-color: #2d3748;
         }
         body {
-            margin-top: 64px; /* Ensure there's space below the header */
-        }
-        #sidebar {
-            transition: transform 0.3s ease; 
-            position: fixed;
-            left: 0;
-            top: 40px;
-        }
-        @media (max-width: 768px) {
-            #sidebar {
-                position: fixed;
-                z-index: -1; /* Ensure sidebar is behind the header */
-                top: 32px; /* Adjust based on header height */
-                width: 100%;
-                height: calc(100vh - 64px); /* Adjust height for mobile */
-                transform: translateX(-100%); /* Hide sidebar by default */
-            }
-            #sidebar.hidden {
-                transform: translateX(0); /* Show sidebar when not hidden */
-            }
-            #sidebar.visible {
-                transform: translateX(100%); /* Show sidebar when toggled */
-            }
-            main {
-                padding: 4px; /* Reduce padding on smaller screens */
-            }
-        }
-        main {
-            min-height: calc(100vh - 64px); /* Ensure main content height is full */
-        }
+            margin-top: 40px; /* Ensure there's space below the header *
+        
         /* Centering Styles */
-        .centered-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%; /* Full height for centering */
-        }
-        .centered-content {
-            width: 100%;
-            max-width: 800px; /* Limit max width for larger screens */
-            padding: 10px; /* Add padding for aesthetics */
-            text-align: center; /* Center text */
         }
         
-        #main-container{
-            font-family: 'Open Sans', sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            justify-items: center;
-            width: 100%;
-            height: 800px;
-            gap: 4px;
-        }
-
-        
-
     </style>
 </head>
 <body class="flex flex-col overflow-y-hidden light-mode" id="body">
-    <header class="fixed left-0 right-0 top-0 flex justify-between items-center p-2 shadow-md w-full z-10 light-mode" id="header">
+    <header class="fixed left-0 right-0 top-0 flex justify-between items-center p-2 shadow-md w-full z-10 light-mode " id="header">
         <div class="flex items-center">
-            <button id="sidebarToggle" class="lg:hidden text-white hover:bg-gray-700 rounded-lg px-3 py-2 transition flex items-center">
+            <button id="sidebarToggle" class="lg:hidden text-white hover:bg-gray-700 rounded-lg px-3 transition flex items-center">
                 <span class="material-icons">menu</span>
             </button>
             <div class="text-2xl font-bold text-white ml-2">
@@ -124,7 +71,7 @@
         </nav>
     </header>
     
-    <div class="flex w-full h-screen justify-center items-center" id="main-container">
+    <div class="flex w-full h-screen "> <!-- Added margin-top to avoid overlap with header -->
         <aside id="sidebar" class="hidden lg:block lg:w-1/4 bg-gray-800 text-white h-full p-2 shadow-lg">
             <ul class="space-y-2 mt-2">
                 <li>
@@ -163,17 +110,16 @@
                     </a>
                 </li>
                 <li class="border-t border-gray-700 mt-4 space-x-2">
-                    <a href="{% url 'dropout_rate' %}" class="flex p-2 rounded">
+                    <a href="{% url 'dropout_summary' %}" class="flex p-2 rounded">
                         <span class="material-icons mr-4">arrow_drop_down_circle</span> Dropout Rate
                     </a>
                 </li>
             </ul>
         </aside>
-
-        <main class="flex flex-grow mt-0 bg-white shadow-sm">
-            <div class="">
+    
+        <main class="flex-grow lg:w-3/4 bg-white shadow-sm">
+            <div class="flex flex-col h-full w-full justify-center items-center">
                 {% block content %}
-                
                 {% endblock %}
             </div>
         </main>

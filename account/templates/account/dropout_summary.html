@@ -1,17 +1,50 @@
 {% extends 'account/base.html' %}
 
 {% block content %}
-    <div class="summary">
-        <h1 class="">Dropout Summary</h1>
-        <p>Total Students: {{ summary.total_students }}</p>
-        <p>Total Dropouts: {{ summary.total_dropouts }}</p>
-        <p>Academic Dropouts: {{ summary.academic_dropouts }}</p>
-        <p>Financial Dropouts: {{ summary.financial_dropouts }}</p>
-        <p>Health Dropouts: {{ summary.health_dropouts }}</p>
-        <p>Personal Dropouts: {{ summary.personal_dropouts }}</p>
-        <p>Marriage Dropouts: {{ summary.marriage_dropouts }}</p>
-        <p>Distance Dropouts: {{ summary.distance_dropouts }}</p>
-        <p>Death Dropouts: {{ summary.death_dropouts }}</p>
-        <p>Other Dropouts: {{ summary.other_dropouts }}</p>
+    <div class="summary p-4">
+        <h1 class="text-2xl font-bold mb-4">Dropout Summary</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white p-4 shadow rounded">
+                <p class="font-semibold">Total Students:</p>
+                
+            </div>
+            <div class="bg-white p-4 shadow rounded">
+                <p class="font-semibold">Total Dropouts:</p>
+                
+            </div>
+            <div class="bg-white p-4 shadow rounded">
+                <p class="font-semibold">Academic Dropouts:</p>
+                
+            </div>
+            <div class="bg-white p-4 shadow rounded">
+                <p class="font-semibold">Financial Dropouts:</p>
+                
+            </div>
+            <div class="bg-white p-4 shadow rounded">
+                <p class="font-semibold">Health Dropouts:</p>
+                
+            </div>
+            <div class="bg-white p-4 shadow rounded">
+                <p class="font-semibold">Personal Dropouts:</p>
+                
+            </div>
+            <div class="bg-white p-4 shadow rounded">
+                <p class="font-semibold">Marriage Dropouts:</p>
+                
+            </div>
+            <div class="bg-white p-4 shadow rounded">
+                <p class="font-semibold">Distance Dropouts:</p>
+                
+            </div>
+            <div class="bg-white p-4 shadow rounded">
+                <p class="font-semibold">Death Dropouts:</p>
+                
+            </div>
+            <div class="bg-white p-4 shadow rounded">
+                <p class="font-semibold">Other Dropouts:</p>
+                
+            </div>
+        </div>
     </div>
 {% endblock %}

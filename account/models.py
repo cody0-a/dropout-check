@@ -106,6 +106,8 @@ class Attendance(models.Model):
         return self.student.user.username
     
 class DropoutSummary(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='dropout_summary')
+    is_dropout = models.BooleanField(default=True)
     total_students = models.IntegerField(default=0)
     total_dropouts = models.IntegerField(default=0)
     academic_dropouts = models.IntegerField(default=0)

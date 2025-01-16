@@ -189,16 +189,20 @@ def register_student(request):
         return redirect('some_view')
     return render(request, 'account/register.html')
 
+
 @login_required
 @permission_required('account.can_change_student', raise_exception=True)
 def edit_student(request, student_id):
-    student = Student.objects.get(id=student_id)
-    if request.method == 'POST':
-        # Update logic here
-        return redirect('some_view')
-    return render(request, 'account/edit.html', {'student': student})
+    student = get_object_or_404(Student, id=student_id)
+    form = StudentForm(request.POST or None, instance=student)
 
-@login_required
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('home')  # Redirect after saving
+
+    return render(request, 'account/edit.html', {'form': form, 'student': student})
+
+
 @permission_required('account.can_delete_student', raise_exception=True)
 def delete_student(request, student_id):
     student = Student.objects.get(id=student_id)

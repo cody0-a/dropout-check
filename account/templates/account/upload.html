@@ -1,18 +1,20 @@
-{% extends 'account/base.html'%}
-
+{% extends 'account/base.html' %}
 
 {% block content %}
-    <div class="flex flex-col items-center justify-center h-screen">
-        <form action="" class="flex flex-col space-y-2 gap-2 justify-center shadow-sm p-2 border-r border-b mt-2 ">
-            <div class=""><p class="text-xl  text-bold">upload xlsx file for converting </p></div>
-             <div class="flex justify-center items-center shadow-sm bg-blue-500">
-                 <input type="file" name="file" id="xls-file" class="p-4 rounded">
-             </div>
-             <div>
+    <div class="flex flex-col items-center justify-center h-screen w-full ">
+        <form action="" method="post" enctype="multipart/form-data" class="flex flex-col space-y-2 gap-2 justify-center shadow-sm p-2 border-r border-b mt-2">
+            {% csrf_token %}
+            <div>
+                <p class="text-xl font-bold">Upload XLSX File for Conversion</p>
+            </div>
+            <div class="flex justify-center items-center shadow-sm bg-blue-500">
+                <input type="file" name="file" id="xls-file" class="p-4 rounded" accept=".xlsx, .xls">
+            </div>
+            <div>
                 <button type="submit" class="bg-blue-500 p-2 m-2 rounded shadow-xl float-right hover:bg-blue-700 text-white">
-                    upload
+                    Upload
                 </button>
-             </div>
-         </form>
+            </div>
+        </form>
     </div>
 {% endblock %}

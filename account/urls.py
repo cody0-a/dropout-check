@@ -1,6 +1,5 @@
 from django.urls import path
 from . import views
-from django.conf.urls import handler400
 
 
 urlpatterns = [
@@ -34,7 +33,7 @@ urlpatterns = [
     path('settings/', views.get_settings, name='settings'),
     path('dropout_rate/', views.get_dropout_rate, name='dropout_rate'),
     path('categorized-students/', views.categorize_students, name='categorized_students'),
-    path('edit-student/', views.edit_student, name='edit_student'),
+    path('edit-student/<int:student_id>', views.edit_student, name='edit_student'),
     path('logout/', views.logout_view, name='logout'),
     path('upload/',views.upload_file2,name='upload-file'),
 ]

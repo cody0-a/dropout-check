@@ -644,4 +644,8 @@ def upload_file(request):
     else:
         form = UploadFileForm()
     
-    return render(request, 'upload.html', {'form': form})
+    return render(request, 'account/upload.html', {'form': form})
+
+
+def upload_file2(request):
+    return render(request,'account/base.html')

@@ -3,27 +3,32 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 
 class CustomUser(AbstractUser):
+    ROLE_CHOICES = [
+        ('admin', 'Admin'),
+        ('staff', 'Staff'),
+        ('principal', 'Principal'),
+    ]
+
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
     sex = models.CharField(max_length=1, choices=[('F', 'Female'), ('M', 'Male')])
-
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
     sex = models.CharField(max_length=1, choices=[('F', 'Female'), ('M', 'Male')])
+    image = models.ImageField(upload_to='photos/',width_field=300,height_field=400)
     phone = models.CharField(max_length=15, null=True, blank=True)
     address = models.TextField(null=True, blank=True)
     date_of_birth = models.DateTimeField(null=False,auto_now=True, auto_now_add=False)
 
 class Student(models.Model):
+    
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='list_student')
     roll_no = models.CharField(max_length=10)
-
-    department = models.CharField(max_length=100)
     batch = models.CharField(max_length=4)
     section = models.CharField(max_length=1)
     semester = models.IntegerField()
-    cgpa = models.FloatField()
     dropout = models.BooleanField(default=False)
     dropout_reason = models.TextField(null=True, blank=True)
 
@@ -40,14 +45,27 @@ class Student(models.Model):
     
     # other fields
 
+class SchoolAddress(models.Model):
+    SchoolName =models.ForeignKey('SchoolName',on_delete=models.DO_NOTHING,related_name='school_address_name')
+    wereda_name = models.CharField(max_length=100)
+    street_name = models.CharField(max_length=100,default='unknown'.title())
+    city = models.CharField(max_length=100,default='unknown'.title())
+    state = models.CharField(max_length=100,default='unknown'.title())
+    region = models.CharField(max_length=64)
+    zone_id = models.CharField(max_length=64)
+    school_code = models.CharField(max_length=64)
+
+    def __str__(self):
+        return self.wereda_name
+
+
 class SchoolName(models.Model):
     name = models.CharField(max_length=100)
-    address = models.TextField()
+    address = models.ForeignKey(SchoolAddress,on_delete=models.CASCADE)
     phone = models.CharField(max_length=15)
     email = models.EmailField()
     website = models.URLField()
     logo = models.ImageField(upload_to='school_logo')
-    established = models.DateField()
     motto = models.TextField()
     about = models.TextField()
     principal = models.CharField(max_length=100)
@@ -95,24 +113,19 @@ class DropOut(models.Model):
         ('Death', 'Death'),
         ('Other', 'Other'),
     ]
+    SEMESTER_CHOICE = [
+        ('1st Semester', '1st Semester'),
+        ('2nd Semester', '2nd Semester'),
+    ]
     student = models.OneToOneField(Student, on_delete=models.CASCADE, related_name='dropout_student')
     reason = models.TextField()
     dropout_reason = models.CharField(max_length=100, choices=DROP_OUT_CHOICES)
-    date = models.DateTimeField(auto_now=True, auto_now_add=False)
+    year = models.DateTimeField(auto_now=True, auto_now_add=False)
+    semester = models.CharField(max_length=32,choices=SEMESTER_CHOICE)
 
     def __str__(self):
         return self.student.user.username
     
-
-class Attendance(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='attendance')
-    date = models.DateField(auto_now=True, auto_now_add=False)
-    status = models.CharField(max_length=10, choices=[('Present', 'Present'), ('Absent', 'Absent')])
-    reason = models.TextField(null=True, blank=True)
-
-
-    def __str__(self):
-        return self.student.user.username
     
 class DropoutSummary(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='dropout_summary')

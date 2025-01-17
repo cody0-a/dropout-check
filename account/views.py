@@ -651,5 +651,11 @@ def upload_file(request):
     return render(request, 'account/upload.html', {'form': form})
 
 
-def upload_file2(request):
-    return render(request,'account/upload.html')
+
+def dropout_only(request):
+    if request.method == 'POST':
+        form = DropoutForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('')
+

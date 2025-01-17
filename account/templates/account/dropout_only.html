@@ -1,0 +1,52 @@
+{% extends 'account/base.html'%}
+
+{% block content %}
+    <div>
+        <h2 class="capital text-center p-2 space-y-2 text-blue-700">Dropout only fill form</h2>
+        <form action="" class="flex flex-col items-center justify-center w-full p-4" method="post">
+    </div>
+    <div class="block">
+        <label for="first_name">
+            First Name
+        </label>
+        <input type="text" class="focus:outline-none focus:ring-blue">
+    </div>
+    <div class="block">
+        <label for="last_name">
+           Last Name
+        </label>
+        <input type="text" class="focus:outline-none focus:ring-blue">
+    </div>
+    <div class="block">
+        <label for="middle_name">
+            Middle Name
+        </label>
+        <input type="text" class="focus:outline-none focus:ring-blue">
+    </div>
+    <div class="block">
+        <label for="roll_no">
+            roll No
+        </label>
+        <input type="text" class="focus:outline-none focus:ring-blue">
+    </div>
+    <div class="block">
+        <label for="reason">
+            reason
+        </label>
+        <select name="reason" id="reason"></select>
+    </div>
+    
+    <div class="block">
+        <label for="dropout-year">
+            Dropout year
+        </label>
+        <select name="dropout-year" id="year"></select>
+    </div>
+    <div class="block">
+        <label for="section">
+            section
+        </label>
+        <input type="text" class="focus:outline-none focus:ring-blue" id="section">
+    </div>
+    </form>
+{% endblock %}

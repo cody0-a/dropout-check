@@ -85,10 +85,19 @@ class Parent(models.Model):
         return self.user.username
     
 class DropOut(models.Model):
+    DROP_OUT_CHOICES = [
+        ('Academic', 'Academic'),
+        ('Financial', 'Financial'),
+        ('Health', 'Health'),
+        ('Personal', 'Personal'),
+        ('Marriage', 'Marriage'),
+        ('Distance', 'Distance'),
+        ('Death', 'Death'),
+        ('Other', 'Other'),
+    ]
     student = models.OneToOneField(Student, on_delete=models.CASCADE, related_name='dropout_student')
     reason = models.TextField()
-    DropOut_case = models.CharField(max_length=100, choices=[('Academic', 'Academic'), ('Financial', 'Financial'), ('Health', 'Health'), ('Personal', 'Personal'),('marriage', 'marriage'),('distance', 'distance'),
-    ('death','death'),('other', 'other')])
+    dropout_reason = models.CharField(max_length=100, choices=DROP_OUT_CHOICES)
     date = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     def __str__(self):

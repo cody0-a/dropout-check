@@ -12,7 +12,7 @@ from django.utils.timezone import datetime
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['roll_no', 'department', 'batch', 'section', 'semester', 'cgpa', 'dropout', 'dropout_reason']
+        fields = ['roll_no', 'batch', 'section', 'semester', 'dropout', 'dropout_reason']
         widgets = {
             'dropout': forms.RadioSelect(),
             'dropout_reason': forms.Textarea(attrs={'rows': 4, 'cols': 40,}),
@@ -204,7 +204,7 @@ class UserProfileForm(forms.ModelForm):
     
     class Meta:
         model = UserProfile
-        fields = ('first_name', 'last_name', 'email', 'phone_number')
+        fields = '__all__'
         widgets = [
             forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
             forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
@@ -216,7 +216,7 @@ class UserProfileForm(forms.ModelForm):
 
         day = forms.IntegerField(min_value=1, max_value=31)
         month = forms.IntegerField(min_value=1, max_value=12)
-        year = forms.IntegerField(min_value=1900, max_value=datetime.date.today().year)
+        year = forms.IntegerField(min_value=1900, max_value=datetime.date)
 
 
         def clean_first_name(self):
@@ -304,3 +304,9 @@ class UserProfileForm(forms.ModelForm):
         def is_leap_year(self, year):
             """Check if a year is a leap year."""
             return (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)
+
+        def clean_sex(self):
+            sex = self.cleaned_data.get('sex')
+            if sex not in ['Male','Female']:
+                raise forms.ValidationError('Invalid sex')
+            return sex

@@ -17,7 +17,7 @@ class CustomUser(AbstractUser):
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
     sex = models.CharField(max_length=1, choices=[('F', 'Female'), ('M', 'Male')])
-    image = models.ImageField(upload_to='photos/',width_field=300,height_field=400)
+    image = models.ImageField(upload_to='photos/', default= 'image/default.jpg', width_field=300,height_field=400)
     phone = models.CharField(max_length=15, null=True, blank=True)
     address = models.TextField(null=True, blank=True)
     date_of_birth = models.DateTimeField(null=False,auto_now=True, auto_now_add=False)
@@ -92,15 +92,6 @@ class Teacher(models.Model):
     def __str__(self):
         return self.user.username
     
-class Parent(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='parent')
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    phone = models.CharField(max_length=15)
-    address = models.TextField()
-    date_of_birth = models.DateTimeField()
-
-    def __str__(self):
-        return self.user.username
     
 class DropOut(models.Model):
     DROP_OUT_CHOICES = [

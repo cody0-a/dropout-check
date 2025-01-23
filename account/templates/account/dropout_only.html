@@ -1,52 +1,66 @@
-{% extends 'account/base.html'%}
+{% extends 'account/base.html' %}
 
 {% block content %}
-    <div>
-        <h2 class="capital text-center p-2 space-y-2 text-blue-700">Dropout only fill form</h2>
-        <form action="" class="flex flex-col items-center justify-center w-full p-4" method="post">
+    <div class="flex flex-col w-3/4 overflow-y-auto bg-white shadow-md rounded-lg">
+        <div class="flex flex-col justify-center items-center p-4 border-b border-gray-200">
+            <h2 class="text-center text-2xl font-bold text-blue-700">Dropout Form</h2>
+        </div>
+        <form id="dropoutForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 mb-4" method="POST">
+            {% csrf_token %}
+            <div class="flex flex-col">
+                <label for="first_name" class="block text-sm font-medium text-gray-700">First Name</label>
+                <input type="text" id="first_name" name="first_name" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500" required>
+            </div>
+            <div class="flex flex-col">
+                <label for="last_name" class="block text-sm font-medium text-gray-700">Last Name</label>
+                <input type="text" id="last_name" name="last_name" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500" required>
+            </div>
+            <div class="flex flex-col">
+                <label for="middle_name" class="block text-sm font-medium text-gray-700">Middle Name</label>
+                <input type="text" id="middle_name" name="middle_name" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500">
+            </div>
+            <div class="flex flex-col">
+                <label for="roll_no" class="block text-sm font-medium text-gray-700">Roll No</label>
+                <input type="text" id="roll_no" name="roll_no" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500" required>
+            </div>
+            <div class="flex flex-col">
+                <label for="reason" class="block text-sm font-medium text-gray-700">Reason</label>
+                <select name="reason" id="reason" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500" required>
+                    <option value="">Select a reason</option>
+                    <option value="personal">Personal</option>
+                    <option value="academic">Academic</option>
+                    <option value="financial">Financial</option>
+                </select>
+            </div>
+            <div class="flex flex-col">
+                <label for="dropout-year" class="block text-sm font-medium text-gray-700">Dropout Year</label>
+                <select name="dropout-year" id="dropout-year" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500" required>
+                    <option value="">Select a year</option>
+                    <script>
+                        const currentYear = new Date().getFullYear();
+                        for (let year = currentYear; year >= 2000; year--) {
+                            document.write(`<option value="${year}">${year}</option>`);
+                        }
+                    </script>
+                </select>
+            </div>
+            <div class="flex flex-col">
+                <label for="section" class="block text-sm font-medium text-gray-700">Section</label>
+                <input type="text" id="section" name="section" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500" required>
+            </div>
+            <div class="flex justify-center col-span-2">
+                <button type="submit" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none">Submit</button>
+            </div>
+        </form>
     </div>
-    <div class="block">
-        <label for="first_name">
-            First Name
-        </label>
-        <input type="text" class="focus:outline-none focus:ring-blue">
-    </div>
-    <div class="block">
-        <label for="last_name">
-           Last Name
-        </label>
-        <input type="text" class="focus:outline-none focus:ring-blue">
-    </div>
-    <div class="block">
-        <label for="middle_name">
-            Middle Name
-        </label>
-        <input type="text" class="focus:outline-none focus:ring-blue">
-    </div>
-    <div class="block">
-        <label for="roll_no">
-            roll No
-        </label>
-        <input type="text" class="focus:outline-none focus:ring-blue">
-    </div>
-    <div class="block">
-        <label for="reason">
-            reason
-        </label>
-        <select name="reason" id="reason"></select>
-    </div>
-    
-    <div class="block">
-        <label for="dropout-year">
-            Dropout year
-        </label>
-        <select name="dropout-year" id="year"></select>
-    </div>
-    <div class="block">
-        <label for="section">
-            section
-        </label>
-        <input type="text" class="focus:outline-none focus:ring-blue" id="section">
-    </div>
-    </form>
+
+    <script>
+        document.getElementById('dropoutForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Handle form submission logic here, e.g., using fetch or AJAX
+            alert('Form submitted successfully!');
+            // Optionally, clear the form or redirect
+            this.reset();
+        });
+    </script>
 {% endblock %}

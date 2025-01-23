@@ -40,12 +40,7 @@ class StudentForm(forms.ModelForm):
                 raise forms.ValidationError('User name is required')
             return user
         
-       
 
-class ProfileForm(forms.ModelForm):
-    class Meta:
-        model = Student 
-        fields = '__all__'
 
 
 class UploadFileForm(forms.Form):
@@ -53,9 +48,10 @@ class UploadFileForm(forms.Form):
 
 
 class DropOutForm(forms.ModelForm):
-    SEM = forms.ChoiceField(choices = DropOut.SEMESTER_CHOICE)
+    SEM = forms.ChoiceField(choices=DropOut.SEMESTER_CHOICE)
     dropout_choice = forms.ChoiceField(choices=DropOut.DROP_OUT_CHOICES)
-    class meta:
+
+    class Meta:  # Corrected 'meta' to 'Meta'
         model = DropOut
         fields = '__all__'
     

@@ -14,14 +14,20 @@ class CustomUser(AbstractUser):
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
     sex = models.CharField(max_length=1, choices=[('F', 'Female'), ('M', 'Male')])
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
-    sex = models.CharField(max_length=1, choices=[('F', 'Female'), ('M', 'Male')])
-    image = models.ImageField(upload_to='photos/', default= 'image/default.jpg', width_field=300,height_field=400)
-    phone = models.CharField(max_length=15, null=True, blank=True)
-    address = models.TextField(null=True, blank=True)
-    date_of_birth = models.DateTimeField(null=False,auto_now=True, auto_now_add=False)
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    phone = models.CharField(max_length=15, blank=True)
+    address = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    state = models.CharField(max_length=100, blank=True)
+    country = models.CharField(max_length=100, blank=True)
+    zip_code = models.CharField(max_length=10, blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    bio = models.TextField(blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
 
+    def __str__(self):
+        return self.user.username
 class Student(models.Model):
     
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='list_student')
@@ -135,3 +141,8 @@ class DropoutSummary(models.Model):
     def __str__(self):
         return "Dropout Summary"
     
+class ImageModel(models.Model):
+     title = models.CharField(max_length=100) 
+     image = models.ImageField(upload_to='images/')
+     def __str__(self): 
+         return self.title

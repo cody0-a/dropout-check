@@ -1,13 +1,26 @@
+from django.contrib.auth.forms import SetPasswordForm,PasswordChangeForm,PasswordResetForm
+from django.utils.http import urlsafe_base64_decode
 import openpyxl
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, permission_required
 from .models import * 
-from .models import UserProfile
+from django.urls import reverse_lazy
+from django.utils.encoding import force_str
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 from .forms import * 
+from .forms import ImageForm,PhoneChangeForm
 from django.http import HttpResponse
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
+
 User = get_user_model()
 
 def home(request):
@@ -64,7 +77,7 @@ def register(request):
 
         # Create date_of_birth from year, month, and day
         date_of_birth = f"{year}-{month.zfill(2)}-{day.zfill(2)}"  # Format to YYYY-MM-DD
-        UserProfile.objects.create(user=user, sex=sex, date_of_birth=date_of_birth)
+        Profile.objects.create(user=user, sex=sex, date_of_birth=date_of_birth)
 
         # Log the user in
         login(request, user)
@@ -75,7 +88,7 @@ def register(request):
 
 def get_registered_users(request):
     users = User.objects.all()
-    profiles = UserProfile.objects.all()
+    profiles = Profile.objects.all()
     user_data = [{
         'username': user.username,
         'email': user.email,
@@ -285,7 +298,7 @@ def get_reports(request):
 @permission_required('account.can_edit_student', raise_exception=True)
 def update_profile(request):
     user = request.user
-    profile = UserProfile.objects.get(user=user)
+    profile = Profile.objects.get(user=user)
     if request.method == 'POST':
         # Update logic here
         return redirect('profile')
@@ -295,27 +308,27 @@ def update_profile(request):
 @permission_required('account.can_view_student', raise_exception=True)
 def view_profile(request):
     user = request.user
-    profile = UserProfile.objects.get(user=user)
+    profile = Profile.objects.get(user=user)
     return render(request, 'account/profile.html', {'profile': profile})
 
 @login_required
 @permission_required('account.can_view_student', raise_exception=True)
 def search_profile(request):
     query = request.GET.get('query')
-    profiles = UserProfile.objects.filter(user__username__icontains=query)
+    profiles = Profile.objects.filter(user__username__icontains=query)
     return render(request, 'account/search_profile.html', {'profiles': profiles})
 
 @login_required
 @permission_required('account.can_view_student', raise_exception=True)
 def filter_profile(request):
     profile = request.GET.get('profile')
-    profiles = UserProfile.objects.filter(profile=profile)
+    profiles = Profile.objects.filter(profile=profile)
     return render(request, 'account/filter_profile.html', {'profiles': profiles})
 
 @login_required
 @permission_required('account.can_view_student', raise_exception=True)
 def sort_profile(request):
-    profiles = UserProfile.objects.all().order_by('user__username')
+    profiles = Profile.objects.all().order_by('user__username')
     return render(request, 'account/sort_profile.html', {'profiles': profiles})
 
 
@@ -329,7 +342,7 @@ def profile(request):
 @permission_required('account.can_delete_student', raise_exception=True)
 def delete_profile(request):
     user = request.user
-    profile = UserProfile.objects.get(user=user)
+    profile = Profile.objects.get(user=user)
     if request.method == 'POST':
         profile.delete()
         return redirect('home')
@@ -664,5 +677,151 @@ def dropout_only(request):
 
     form = DropOutForm()
     return render(request, 'account/dropout_only.html', {'form': form})
+
+
+def rate(request):
+    return render(request,'account/dropout_rate_graph.html')
         
+def upload_image(request):
+    if request.method == 'POST':
+        form = ImageForm(request.POST, request.FILES)
+        if form.is_valid(): 
+            form.save() 
+            return redirect('success')
+    else: 
+        form = ImageForm() 
+        return render(request, 'account/upload_image.html', {'form': form})
     
+@login_required
+def change_email(request):
+    if request.method == 'POST':
+        form = EmailChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('home')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = EmailChangeForm(request.user)
+    
+    return render(request, 'change_password.html', {
+        'form': form
+    })
+
+def success(request):
+    return render(request,'account/success.html')
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, 'Your password has been changed successfully!')
+            return redirect('password_change_done')  # Redirect to a success page
+    else:
+        form = PasswordChangeForm(request.user)
+
+    return render(request, 'account/change_password.html', {'form': form})
+
+
+def password_change_done(request):
+    return render(request, 'account/password_change_done.html')
+
+
+def password_reset_request(request):
+    if request.method == 'POST':
+        form = PasswordResetForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            subject = 'Password Reset Requested'
+            email_template_name = 'password_reset_email.html'
+            context = {
+                'email': user.email,
+                'domain': request.get_host(),
+                'site_name': 'Your Site Name',
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': default_token_generator.make_token(user),
+                'protocol': 'http',
+            }
+            email = render_to_string(email_template_name, context)
+            send_mail(subject, email, 'admin@yourdomain.com', [user.email])
+            messages.info(request, 'A link to reset your password has been sent to your email.')
+            return redirect('password_reset_done')
+    else:
+        form = PasswordResetForm()
+    return render(request, 'password_reset.html', {'form': form})
+
+
+
+def password_reset_confirm(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if request.method == 'POST':
+        form = SetPasswordForm(user, request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your password has been reset successfully.')
+            return redirect('password_reset_complete')
+    else:
+        form = SetPasswordForm(user)
+
+    return render(request, 'account/password_reset_confirm.html', {'form': form, 'validlink': user is not None})
+
+
+def password_reset_done(request):
+    return render(request, 'account/password_reset_done.html')
+
+def password_reset_complete(request):
+    return render(request, 'account/password_reset_complete.html')
+
+@login_required
+def change_phone(request):
+    form = PhoneChangeForm(request.POST)
+    if form.is_valid():
+        phone  = form.cleaned_data.get('phone')
+        request.user.phone = phone
+        request.user.save()
+        messages.success(request, 'Phone number updated successfully')
+        return redirect('phone_change_done')
+    
+    else:
+        messages.error(request, 'Invalid phone number')
+        form = PhoneChangeForm()
+    return render(request, 'account/change_phone.html', {'form': form})
+@login_required
+def account_delete(request,pk):
+    if User.objects.filter(id=pk).exists():
+        user = User.objects.get(id=pk)
+        user.delete()
+        messages.success(request, 'Account deleted successfully')
+        return redirect('home')
+    else:
+        messages.error(request, 'User not found')
+        
+
+@login_required
+def view_profile(request):
+    profile = Profile.objects.get(user=request.user)
+    return render(request, 'view_profile.html', {'profile': profile})
+
+@login_required
+def edit_profile(request):
+    profile = Profile.objects.get(user=request.user)
+    
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated successfully!')
+            return redirect('view_profile')
+    else:
+        form = ProfileForm(instance=profile)
+
+    return render(request, 'edit_profile.html', {'form': form})

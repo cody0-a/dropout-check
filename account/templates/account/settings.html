@@ -1,0 +1,48 @@
+{% extends 'account/base.html' %}
+
+{% block content %}
+<div class="flex flex-row justify-center items-center border-b border-r-1 border-gray-200 p-4 settings"> 
+    <button onclick="dropdown(event)" class="bg-gray-200 p-2 rounded">
+        Settings
+    </button>
+    <ul id="setting" class="hidden absolute bg-white border border-gray-200 mt-2 rounded shadow-lg">
+        <li>
+            <a href="{% url 'change_password' %}" class="block p-2 hover:bg-gray-200">Change Password</a>
+        </li>
+        <li>
+            <a href="{% url 'change-email' %}" class="block p-2 hover:bg-gray-200">Change Email</a>
+        </li>
+        <li>
+            <a href="{% url 'account-delete' %}" class="block p-2 hover:bg-gray-200">Delete Account</a>
+        </li>
+        <li>
+            <a href="{% url 'logout' %}" class="block p-2 hover:bg-gray-200">Logout</a>
+        </li>
+        <li>
+            <a href="{% url 'account_profile' %}" class="block p-2 hover:bg-gray-200">Profile</a>
+        </li>
+        <li>
+            <a href="{% url 'change-phone' %}" class="block p-2 hover:bg-gray-200">Change Phone</a>
+        </li>
+    </ul>
+</div>
+
+<script>
+    function dropdown(event) {
+        event.preventDefault();
+        var settingsList = document.getElementById('setting');
+        // Toggle the "hidden" class to show/hide the dropdown
+        settingsList.classList.toggle('hidden');
+    }
+
+    // Optional: Click outside to close the dropdown
+    window.onclick = function(event) {
+        var dropdown = document.getElementById("setting");
+        if (!event.target.matches('.settings button')) {
+            if (!dropdown.classList.contains('hidden')) {
+                dropdown.classList.add('hidden');
+            }
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'account/base.html' %}
+
+{% block content %}
+<div class="flex flex-col items-center">
+    <h2 class="text-center text-2xl font-bold text-blue-700 mb-4"></h2>
+    <canvas id="dropoutChart" width="1000" height="400"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('dropoutChart').getContext('2d');
+    const dropoutChart = new Chart(ctx, {
+        type: 'bar', // Change to 'line', 'pie', etc. as needed
+        data: {
+            labels: ['2019','2020', '2021', '2022', '2023','2024','2025'], // Years or other categories
+            datasets: [{
+                label: 'Dropout Rate (%)',
+                data: [15, 20, 10, 25], // Replace with your data
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Rate (%)'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Year'
+                    }
+                }
+            },
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Dropout Rate Over Years'
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

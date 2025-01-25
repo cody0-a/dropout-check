@@ -1,0 +1,29 @@
+<header class="fixed left-0 right-0 top-0 flex justify-between items-center p-2 shadow-md w-full z-10 light-mode" id="header">
+    <div class="flex items-center">
+        <button id="sidebarToggle" class="lg:hidden text-white hover:bg-gray-700 rounded-lg px-3 transition flex items-center">
+            <span class="material-icons">menu</span>
+        </button>
+        <div class="text-2xl font-bold text-white ml-2">
+            <a href="{% url 'home' %}">Korax</a>
+        </div>
+    </div>
+    <nav class="relative flex items-center space-x-4">
+        <button id="darkModeToggle" class="text-white hover:bg-gray-700 rounded-lg px-3 py-2 transition flex items-center">
+            <span class="material-icons">brightness_6</span>
+            <span class="ml-2">Dark Mode</span>
+        </button>
+        <button id="dropdownButton" class="text-white hover:bg-gray-700 rounded-lg px-3 py-2 transition flex items-center">
+            <span class="material-icons">account_circle</span>
+            <span class="ml-2">Account</span>
+            <span class="material-icons ml-1">arrow_drop_down</span>
+        </button>
+        <ul id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20">
+            <li>
+                <a href="{% url 'logout' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</a>
+            </li>
+            <li>
+                <a href="{% url 'register' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Register</a>
+            </li>
+        </ul>
+    </nav>
+</header>

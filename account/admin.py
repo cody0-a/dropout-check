@@ -1,10 +1,5 @@
 from django.contrib import admin
-from .models import UserProfile, Student, SchoolName, Teacher,CustomUser
-
-@admin.register(UserProfile)    
-class UserProfile(admin.ModelAdmin):
-    pass
-
+from .models import Student, SchoolName, Teacher,CustomUser,Profile
 
 @admin.register(Student)
 class Student(admin.ModelAdmin):
@@ -22,6 +17,7 @@ class Teacher(admin.ModelAdmin):
 class CustomUser(admin.ModelAdmin):
     pass
 
+admin.site.register(Profile)
 
 admin.site.site_header = "Korax School Management System"
 admin.site.site_title = "Korax School Management System"

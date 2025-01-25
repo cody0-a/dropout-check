@@ -1,0 +1,15 @@
+{% extends 'account/base.html' %}
+
+{% block content %}
+<h2>{{ profile.user.username }}'s Profile</h2>
+<img src="{{ profile.profile_picture.url }}" alt="Profile Picture" width="150" />
+<p><strong>Phone:</strong> {{ profile.phone }}</p>
+<p><strong>Address:</strong> {{ profile.address }}</p>
+<p><strong>City:</strong> {{ profile.city }}</p>
+<p><strong>State:</strong> {{ profile.state }}</p>
+<p><strong>Country:</strong> {{ profile.country }}</p>
+<p><strong>Zip Code:</strong> {{ profile.zip_code }}</p>
+<p><strong>Date of Birth:</strong> {{ profile.date_of_birth }}</p>
+<p><strong>Bio:</strong> {{ profile.bio }}</p>
+<a href="{% url 'edit_profile' %}">Edit Profile</a>
+{% endblock %}

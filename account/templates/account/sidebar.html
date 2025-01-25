@@ -1,0 +1,50 @@
+
+        <aside id="sidebar" class="fixed top-14 left-0 hidden lg:block w-1/4 bg-gray-800 text-white h-full p-2 shadow-lg">
+            <ul class="space-y-2 mt-2">
+                <li>
+                    <a href="{% url 'dashboard' %}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                        <span class="material-icons mr-2">dashboard</span> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'users' %}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                        <span class="material-icons mr-2">person</span> Users
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'category' %}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                        <span class="material-icons mr-2">category</span> Category
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'student' %}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                        <span class="material-icons mr-2">people</span> Students
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'dropout-rate' %}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                        <span class="material-icons mr-2">summarize</span> Reports
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'settings' %}" class="flex items-center p-2 rounded hover:bg-gray-700">
+                        <span class="material-icons mr-2">settings</span> Settings
+                    </a>
+                </li>
+                <li class="border-t border-gray-700 mt-4 space-x-2">
+                    <a href="{% url 'add' %}" class="flex p-2 rounded">
+                        <span class="material-icons mr-4">arrow_drop_down_circle</span> Add
+                    </a>
+                </li>
+                <li class="border-t border-gray-700 mt-4 space-x-2">
+                    <a href="{% url 'dropout_summary' %}" class="flex p-2 rounded">
+                        <span class="material-icons mr-4">arrow_drop_down_circle</span> Dropout Rate
+                    </a>
+                </li>
+                <li class="border-t border-gray-700 mt-4 space-y-2">
+                    <a href="{% url 'dropout-only' %}">Dropout only register</a>
+                    <span class="material-icons mr-4">account</span>
+                </li>
+            </ul>
+        </aside>
+    

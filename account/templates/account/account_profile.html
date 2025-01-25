@@ -1,0 +1,65 @@
+{% extends 'account/base.html' %}
+
+{% block content %}
+<div class="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6 mt-10">
+    <h2 class="text-2xl font-semibold text-center mb-6">Edit Profile</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="mb-4">
+            {{ form.phone.label(class="block text-sm font-medium text-gray-700") }}
+            {{ form.phone(class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400") }}
+        </div>
+
+        <div class="mb-4">
+            {{ form.address.label(class="block text-sm font-medium text-gray-700") }}
+            {{ form.address(class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400") }}
+        </div>
+
+        <div class="mb-4">
+            {{ form.city.label(class="block text-sm font-medium text-gray-700") }}
+            {{ form.city(class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400") }}
+        </div>
+
+        <div class="mb-4">
+            {{ form.state.label(class="block text-sm font-medium text-gray-700") }}
+            {{ form.state(class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400") }}
+        </div>
+
+        <div class="mb-4">
+            {{ form.country.label(class="block text-sm font-medium text-gray-700") }}
+            {{ form.country(class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400") }}
+        </div>
+
+        <div class="mb-4">
+            {{ form.zip_code.label(class="block text-sm font-medium text-gray-700") }}
+            {{ form.zip_code(class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400") }}
+        </div>
+
+        <div class="mb-4">
+            {{ form.date_of_birth.label(class="block text-sm font-medium text-gray-700") }}
+            {{ form.date_of_birth(class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400") }}
+        </div>
+
+        <div class="mb-4">
+            {{ form.bio.label(class="block text-sm font-medium text-gray-700") }}
+            {{ form.bio(class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400") }}
+        </div>
+
+        <div class="mb-4">
+            {{ form.profile_picture.label(class="block text-sm font-medium text-gray-700") }}
+            {{ form.profile_picture(class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400") }}
+        </div>
+
+        <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-400">
+            Update Profile
+        </button>
+    </form>
+
+    {% if form.non_field_errors %}
+        <div class="mt-4 text-red-600">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

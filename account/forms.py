@@ -1,13 +1,14 @@
 import os
 from django import forms
-from .models import Student,DropOut,SchoolName,UserProfile
+from .models import Student,DropOut,SchoolName,Profile,ImageModel
 from django.core.validators import EmailValidator
 from .validators import validate_phone_number
 from PIL import Image
 import io
 from django.utils.timezone import now
 from django.utils.timezone import datetime
-
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import SetPasswordForm
 
 class StudentForm(forms.ModelForm):
     class Meta:
@@ -196,10 +197,10 @@ class SchoolNameForm(forms.ModelForm):
             return staff
         
 
-class UserProfileForm(forms.ModelForm):
+class ProfileForm(forms.ModelForm):
     
     class Meta:
-        model = UserProfile
+        model = Profile
         fields = '__all__'
         widgets = [
             forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
@@ -306,3 +307,70 @@ class UserProfileForm(forms.ModelForm):
             if sex not in ['Male','Female']:
                 raise forms.ValidationError('Invalid sex')
             return sex
+        
+
+class ImageForm(forms.ModelForm):
+    class Meta:
+        model = ImageModel
+        fields = ['title','image']
+        allowed_format = ['png','jpeg','jpg']
+        
+
+        def clean_image(self):
+            image = self.cleaned_data.get('image')
+            ext = os.path.splitext(image.name)[-1].lower()
+
+            if image.size > 2 * 1024 * 1024:
+                raise forms.ValidationError("Max size of image is 2MB")
+            
+            if ext not in self.allowed_format:
+                raise forms.ValidationError("Invalid image format. Only PNG, JPEG, JPG are allowed.")
+            
+            
+            try:
+                Image.open(image).verify()
+
+            except Exception as e:
+                raise forms.ValidationError("Invalid image file.")
+            
+            return image
+        
+
+class PasswordChangeRequestForm(forms.Form):
+    email = forms.EmailField()
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if not User.objects.filter(email=email).exists():
+            raise forms.ValidationError("No user is associated with this email.")
+        return email
+    
+class PasswordChangeForm(SetPasswordForm):
+    class Meta:
+        model = User
+        fields = ('new_password1', 'new_password2')
+
+
+class PhoneChangeForm(forms.Form):
+    phone = forms.CharField()
+
+    def Clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        if not User.objects.filter(phone=phone).exists():
+            raise forms.ValidationError("No user is associated with this phone number.")
+        return phone
+    
+
+class EmailChangeForm(forms.ModelForm):
+    email = forms.EmailField(required=True)
+    class Meta:
+        model = User
+        fields = ['email']
+        def clean_email(self):
+            email = self.cleaned_data.get('email')
+            if User.objects.filter(email=email).exists():
+                raise forms.ValidationError("Email is already in use.")
+            
+            return email
+        
+

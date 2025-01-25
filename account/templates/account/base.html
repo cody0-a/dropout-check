@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>Korax SMSystem</title>
@@ -33,101 +34,23 @@
         .dark-mode .bg-gray-700 {
             background-color: #2d3748;
         }
-        body {
-            margin-top: 40px; /* Ensure there's space below the header *
-        
-        /* Centering Styles */
+        .hidden{
+            display: hidden;
         }
         
     </style>
 </head>
-<body class="flex flex-col overflow-y-hidden light-mode" id="body">
-    <header class="fixed left-0 right-0 top-0 flex justify-between items-center p-2 shadow-md w-full z-10 light-mode " id="header">
-        <div class="flex items-center">
-            <button id="sidebarToggle" class="lg:hidden text-white hover:bg-gray-700 rounded-lg px-3 transition flex items-center">
-                <span class="material-icons">menu</span>
-            </button>
-            <div class="text-2xl font-bold text-white ml-2">
-                <a href="{% url 'home' %}">Korax</a>
-            </div>
+<body class="flex flex-col light-mode overflow-y-hidden" id="body">
+    
+    {% include 'account/header.html' %}
+
+    {% include 'account/sidebar.html' %}
+    
+        <div class="flex-grow ml-80  mt-10 mr-2 justify-center items-center overflow-y-scroll">
+            {% block content %}
+
+            {%endblock %}
         </div>
-        <nav class="relative flex items-center space-x-4">
-            <button id="darkModeToggle" class="text-white hover:bg-gray-700 rounded-lg px-3 py-2 transition flex items-center">
-                <span class="material-icons">brightness_6</span>
-                <span class="ml-2">Dark Mode</span>
-            </button>
-            <button id="dropdownButton" class="text-white hover:bg-gray-700 rounded-lg px-3 py-2 transition flex items-center">
-                <span class="material-icons">account_circle</span>
-                <span class="ml-2">Account</span>
-                <span class="material-icons ml-1">arrow_drop_down</span>
-            </button>
-            <ul id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20">
-                <li>
-                    <a href="{% url 'logout' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</a>
-                </li>
-                <li>
-                    <a href="{% url 'register' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Register</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
-    
-    <div class="flex w-full h-screen "> <!-- Added margin-top to avoid overlap with header -->
-        <aside id="sidebar" class="hidden lg:block lg:w-1/4 bg-gray-800 text-white h-full p-2 shadow-lg">
-            <ul class="space-y-2 mt-2">
-                <li>
-                    <a href="{% url 'dashboard' %}" class="flex items-center p-2 rounded hover:bg-gray-700">
-                        <span class="material-icons mr-2">dashboard</span> Dashboard
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'users' %}" class="flex items-center p-2 rounded hover:bg-gray-700">
-                        <span class="material-icons mr-2">person</span> Users
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'category' %}" class="flex items-center p-2 rounded hover:bg-gray-700">
-                        <span class="material-icons mr-2">category</span> Category
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'student' %}" class="flex items-center p-2 rounded hover:bg-gray-700">
-                        <span class="material-icons mr-2">people</span> Students
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'reports' %}" class="flex items-center p-2 rounded hover:bg-gray-700">
-                        <span class="material-icons mr-2">summarize</span> Reports
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'settings' %}" class="flex items-center p-2 rounded hover:bg-gray-700">
-                        <span class="material-icons mr-2">settings</span> Settings
-                    </a>
-                </li>
-                <li class="border-t border-gray-700 mt-4 space-x-2">
-                    <a href="{% url 'add' %}" class="flex p-2 rounded">
-                        <span class="material-icons mr-4">arrow_drop_down_circle</span> Add
-                    </a>
-                </li>
-                <li class="border-t border-gray-700 mt-4 space-x-2">
-                    <a href="{% url 'dropout_summary' %}" class="flex p-2 rounded">
-                        <span class="material-icons mr-4">arrow_drop_down_circle</span> Dropout Rate
-                    </a>
-                </li>
-                <ul class="border-t border-gray-700 mt-4 space-y-2">
-                        <a href="{% url 'dropout-only'%}">Dropout only register</a>
-                        <span class="material-icons mr-4">account</span>
-                </ul>
-            </ul>
-        </aside>
-    
-        <main class="flex-grow lg:w-3/4 bg-white shadow-sm">
-            <div class="flex flex-col h-full w-full justify-center items-center">
-                {% block content %}
-                {% endblock %}
-            </div>
-        </main>
     </div>
     
     <script src="{% static 'js/dark.js' %}"></script>

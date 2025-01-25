@@ -1,0 +1,38 @@
+{% extends "account/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="flex flex-col items-start bg-cover bg-center">
+    <div class="bg-black opacity-50"></div>
+    <div class="flex flex-col items-center justify-center h-full">
+        <div class="text-center text-white p-5">
+            <h1 class="text-5xl font-bold mb-4 animate__animated animate__fadeIn">Welcome to Our Image Gallery</h1>
+            <p class="text-lg animate__animated animate__fadeIn animate__delay-1s">Explore stunning visuals and inspiring moments</p>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <h2 class="text-center text-3xl font-semibold mb-8">Image Showcase</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="group relative overflow-hidden rounded-lg shadow-lg">
+            <img src="{% static 'image/default.jpg' %}" alt="Image 1" class="w-full h-full object-cover transition-transform duration-300 transform group-hover:scale-105">
+            <div class="flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h3 class="text-white text-xl">Image Title 1</h3>
+            </div>
+        </div>
+        <div class="rounded-lg shadow-lg">
+            <img src="{% static 'image/student.jpg' %}" alt="Image 2" class="w-full h-full object-cover transition-transform duration-300 transform group-hover:scale-105">
+            <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h3 class="text-white text-xl">Image Title 2</h3>
+            </div>
+        </div>
+        <div class="overflow-hidden rounded-lg shadow-lg">
+            <img src="{% static 'image/patent.jpg' %}" alt="Image 3" class="w-full h-full object-cover transition-transform duration-300 transform group-hover:scale-105">
+            <div class="flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h3 class="text-white text-xl">Image Title 3</h3>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

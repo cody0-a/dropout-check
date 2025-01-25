@@ -24,6 +24,13 @@ from django.contrib import messages
 User = get_user_model()
 
 def home(request):
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            return redirect('admin_home')
+        elif request.user.is_superuser:
+            return redirect('superuser_home')
+        else:
+            return redirect('user_home')
     return render(request, 'account/index.html')
 
 

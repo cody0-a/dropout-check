@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.urls import reverse
 
 class CustomUser(AbstractUser):
     ROLE_CHOICES = [
@@ -29,7 +30,7 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 class Student(models.Model):
-    
+    student_id =models.CharField(max_length=32) 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='list_student')
     roll_no = models.CharField(max_length=10)
     batch = models.CharField(max_length=4)
@@ -38,7 +39,16 @@ class Student(models.Model):
     dropout = models.BooleanField(default=False)
     dropout_reason = models.TextField(null=True, blank=True)
 
+    @classmethod
+    def total_student(cls) -> int:
+        return cls.objects.count()
+    
+
     class Meta:
+        verbose_name = "student"
+        verbose_name_plural = 'students'
+
+
         permissions = [
             ('can_add_student', 'Can add student'),
             ('can_change_student', 'Can change student'),
@@ -46,8 +56,20 @@ class Student(models.Model):
             ('can_view_student', 'Can view student'),
         ]
 
+
     def __str__(self):
         return self.user.username
+
+    def save(self,*args,**kwargs):
+        if not self.student_id:
+            unique_id = self.user.username[0].upper() + str(self.user.id) + str(self.roll_no)
+            self.student_id = unique_id 
+            self.student_id = f"{self.student_id}"
+            super(Student,self).save(*args,**kwargs)
+        super().save(*args,**kwargs)
+
+    def get_absolute_url(self):
+        return reverse('student-detail',kwargs={'pk':self.pk})
     
     # other fields
 
@@ -65,7 +87,7 @@ class SchoolAddress(models.Model):
         return self.wereda_name
 
 
-class SchoolName(models.Model):
+class SchoolProfile(models.Model):
     name = models.CharField(max_length=100)
     address = models.ForeignKey(SchoolAddress,on_delete=models.CASCADE)
     phone = models.CharField(max_length=15)
@@ -84,7 +106,7 @@ class SchoolName(models.Model):
 
 class Teacher(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='teacher')
-    school = models.ForeignKey(SchoolName, on_delete=models.CASCADE)
+    school = models.ForeignKey(SchoolProfile, on_delete=models.CASCADE)
     department = models.CharField(max_length=100)
     designation = models.CharField(max_length=100)
     qualification = models.TextField()
@@ -115,7 +137,7 @@ class DropOut(models.Model):
         ('2nd Semester', '2nd Semester'),
     ]
     student = models.OneToOneField(Student, on_delete=models.CASCADE, related_name='dropout_student')
-    reason = models.TextField()
+
     dropout_reason = models.CharField(max_length=100, choices=DROP_OUT_CHOICES)
     year = models.DateTimeField(auto_now=True, auto_now_add=False)
     semester = models.CharField(max_length=32,choices=SEMESTER_CHOICE)
@@ -123,8 +145,23 @@ class DropOut(models.Model):
     def __str__(self):
         return self.student.user.username
     
+    def calculate_based_on_dropout(self):
+        dropout_count = {reason[0] : 0 for reason in self.DROP_OUT_CHOICES}
+        dropout_count[self.dropout_reason] += 1
+
+        return dropout_count
+
+    def semester_dropout(self):
+        per_semester_dropout = {sem[0] : 0 for sem in self.SEMESTER_CHOICE}
+        per_semester_dropout[self.semester] += 1
+
+    
+
+
+    
     
 class DropoutSummary(models.Model):
+
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='dropout_summary')
     is_dropout = models.BooleanField(default=True)
     total_students = models.IntegerField(default=0)
@@ -141,8 +178,21 @@ class DropoutSummary(models.Model):
     def __str__(self):
         return "Dropout Summary"
     
-class ImageModel(models.Model):
-     title = models.CharField(max_length=100) 
-     image = models.ImageField(upload_to='images/')
-     def __str__(self): 
-         return self.title
+    def get_dropped(self):
+        if self.is_dropout == True:
+            total_dropout = (
+                self.academic_dropouts + self.health_dropouts\
+                + self.personal_dropouts + self.marriage_dropouts\
+                + self.distance_dropouts + self.death_dropouts\
+                + self.other_dropouts + self.financial_dropouts\
+                
+            )
+            total_dropouts = self.total_students - total_dropout
+
+            return total_dropouts
+        else:
+            return
+
+    
+
+        

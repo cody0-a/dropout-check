@@ -1,3 +1,6 @@
+import pandas as pd
+from .forms import UploadFileForm
+from .models import DataFile
 from django.contrib.auth.forms import SetPasswordForm,PasswordChangeForm,PasswordResetForm
 from django.utils.http import urlsafe_base64_decode
 import openpyxl
@@ -23,17 +26,26 @@ from django.contrib import messages
 
 User = get_user_model()
 
-def home(request):
-    if request.user.is_authenticated:
-        if request.user.is_staff:
-            return redirect('admin_home')
-        elif request.user.is_superuser:
-            return redirect('superuser_home')
-        else:
-            return redirect('user_home')
+def home(request):       
     return render(request, 'account/index.html')
 
+@login_required
+def upload_file(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            file_instance = form.save()
+            df = pd.read_excel(file_instance.file.path)
+            summary = df.describe().to_html()
 
+            # Pass the results to the template
+            return render(request, 'analysis/results.html', {
+                'summary': summary,
+                'file_name': file_instance.file.name,
+            })
+    else:
+        form = UploadFileForm()
+    return render(request, 'analysis/upload.html')
 def login_view(request):
     if request.method == "POST":
         username = request.POST['username']
@@ -313,10 +325,20 @@ def update_profile(request):
 
 @login_required
 @permission_required('account.can_view_student', raise_exception=True)
-def view_profile(request):
-    user = request.user
-    profile = Profile.objects.get(user=user)
-    return render(request, 'account/profile.html', {'profile': profile})
+
+@login_required
+def profile_view(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')  # Redirect to the same profile page after saving
+    else:
+        form = ProfileForm(instance=profile)
+
+    return render(request,'account/profile',{'form':form})
 
 @login_required
 @permission_required('account.can_view_student', raise_exception=True)
@@ -820,8 +842,9 @@ def view_profile(request):
 
 @login_required
 def edit_profile(request):
-    profile = Profile.objects.get(user=request.user)
-    
+    # Get or create the profile for the logged-in user
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
@@ -831,4 +854,4 @@ def edit_profile(request):
     else:
         form = ProfileForm(instance=profile)
 
-    return render(request, 'edit_profile.html', {'form': form})
+    return render(request, 'account/edit_profile.html', {'form': form})

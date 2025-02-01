@@ -1,6 +1,6 @@
 import os
 from django import forms
-from .models import Student,DropOut,SchoolName,Profile,ImageModel
+from .models import Student,DropOut,Profile,SchoolProfile,ImageModel,DataFile
 from django.core.validators import EmailValidator
 from .validators import validate_phone_number
 from PIL import Image
@@ -103,7 +103,7 @@ class DropOutForm(forms.ModelForm):
 class SchoolNameForm(forms.ModelForm):
     logo = forms.ImageField()
     class Meta:
-        model = SchoolName
+        model = SchoolProfile
         fields = '__all__'
         exclude = ['website']
         def clean_name(self):
@@ -374,3 +374,7 @@ class EmailChangeForm(forms.ModelForm):
             return email
         
 
+class UploadFileForm(forms.ModelForm):
+    class Meta:
+        model = DataFile
+        fields = ['file']

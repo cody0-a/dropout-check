@@ -1,15 +1,53 @@
 {% extends 'account/base.html' %}
+{% load static %}
+{% load i18n %}
 
 {% block content %}
-<h2>{{ profile.user.username }}'s Profile</h2>
-<img src="{{ profile.profile_picture.url }}" alt="Profile Picture" width="150" />
-<p><strong>Phone:</strong> {{ profile.phone }}</p>
-<p><strong>Address:</strong> {{ profile.address }}</p>
-<p><strong>City:</strong> {{ profile.city }}</p>
-<p><strong>State:</strong> {{ profile.state }}</p>
-<p><strong>Country:</strong> {{ profile.country }}</p>
-<p><strong>Zip Code:</strong> {{ profile.zip_code }}</p>
-<p><strong>Date of Birth:</strong> {{ profile.date_of_birth }}</p>
-<p><strong>Bio:</strong> {{ profile.bio }}</p>
-<a href="{% url 'edit_profile' %}">Edit Profile</a>
+<div class="flex flex-col bg-gray-100 min-h-screen">
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-bold mb-5">Edit Profile</h1>
+        <form method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded shadow-md">
+            {% csrf_token %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="id_phone" class="block text-sm font-medium text-gray-700">Phone</label>
+                    {{ form.phone|as_widget(attrs={'class': 'mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500'}) }}
+                </div>
+                <div>
+                    <label for="id_address" class="block text-sm font-medium text-gray-700">Address</label>
+                    {{ form.address|as_widget(attrs={'class': 'mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500'}) }}
+                </div>
+                <div>
+                    <label for="id_city" class="block text-sm font-medium text-gray-700">City</label>
+                    {{ form.city|as_widget(attrs={'class': 'mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500'}) }}
+                </div>
+                <div>
+                    <label for="id_state" class="block text-sm font-medium text-gray-700">State</label>
+                    {{ form.state|as_widget(attrs={'class': 'mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500'}) }}
+                </div>
+                <div>
+                    <label for="id_country" class="block text-sm font-medium text-gray-700">Country</label>
+                    {{ form.country|as_widget(attrs={'class': 'mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500'}) }}
+                </div>
+                <div>
+                    <label for="id_zip_code" class="block text-sm font-medium text-gray-700">Zip Code</label>
+                    {{ form.zip_code|as_widget(attrs={'class': 'mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500'}) }}
+                </div>
+                <div>
+                    <label for="id_date_of_birth" class="block text-sm font-medium text-gray-700">Date of Birth</label>
+                    {{ form.date_of_birth|as_widget(attrs={'class': 'mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500'}) }}
+                </div>
+                <div class="col-span-2">
+                    <label for="id_bio" class="block text-sm font-medium text-gray-700">Bio</label>
+                    {{ form.bio|as_widget(attrs={'class': 'mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500'}) }}
+                </div>
+                <div class="col-span-2">
+                    <label for="id_profile_picture" class="block text-sm font-medium text-gray-700">Profile Picture</label>
+                    {{ form.profile_picture|as_widget(attrs={'class': 'mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500'}) }}
+                </div>
+            </div>
+            <button type="submit" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+        </form>
+    </div>
+</div>
 {% endblock %}

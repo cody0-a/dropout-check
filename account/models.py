@@ -29,6 +29,8 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+    
 class Student(models.Model):
     student_id =models.CharField(max_length=32) 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='list_student')
@@ -39,9 +41,7 @@ class Student(models.Model):
     dropout = models.BooleanField(default=False)
     dropout_reason = models.TextField(null=True, blank=True)
 
-    @classmethod
-    def total_student(cls) -> int:
-        return cls.objects.count()
+
     
 
     class Meta:
@@ -74,7 +74,7 @@ class Student(models.Model):
     # other fields
 
 class SchoolAddress(models.Model):
-    SchoolName =models.ForeignKey('SchoolName',on_delete=models.DO_NOTHING,related_name='school_address_name')
+    SchoolName =models.ForeignKey('SchoolProfile',on_delete=models.DO_NOTHING,related_name='school_name_address')
     wereda_name = models.CharField(max_length=100)
     street_name = models.CharField(max_length=100,default='unknown'.title())
     city = models.CharField(max_length=100,default='unknown'.title())
@@ -194,5 +194,13 @@ class DropoutSummary(models.Model):
             return
 
     
-
-        
+class ImageModel(models.Model):
+     title = models.CharField(max_length=100) 
+     image = models.ImageField(upload_to='images/')
+     uploaded_at = models.DateTimeField(auto_now_add=True)
+     def __str__(self): 
+         return self.title
+     
+class DataFile(models.Model):
+    file = models.FileField(upload_to='uploads/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)

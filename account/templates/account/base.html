@@ -10,78 +10,130 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>Korax SMSystem</title>
     <style>
+        /* Light and Dark Mode Styles */
         body.light-mode {
             background-color: #f7fafc; /* Light gray background */
+            color: #1a1d23; /* Dark gray text */
         }
         header.light-mode {
             background-color: #2a3342; /* Dark background */
+            color: #f7fafc; /* Light text */
         }
         body.dark-mode {
             background-color: #2a3342; /* Dark background */
+            color: #f7fafc; /* Light text */
         }
         header.dark-mode {
             background-color: #1a202c; /* Even darker background */
+            color: #f7fafc; /* Light text */
         }
         .dark-mode .text-white {
             color: #f7fafc;
+            background-color: black;
         }
         .dark-mode .bg-white {
             background-color: #2a3342;
+            color: white;
         }
         .dark-mode .bg-gray-800 {
             background-color: #1a202c;
         }
         .dark-mode .bg-gray-700 {
             background-color: #2d3748;
+            color: white;
         }
-        .hidden{
-            display: hidden;
+
+        /* Sidebar Animation */
+        #sidebar {
+            transition: transform 0.2s ease-in-out;
         }
-        
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                width: 100%;
+                margin-left: 0;
+            }
+            #sidebar {
+                transform: translateX(-100%);
+            }
+            #sidebar.visible {
+                transform: translateX(0);
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
     </style>
 </head>
-<body class="flex flex-col light-mode overflow-y-hidden" id="body">
-    
+<body class="flex flex-col light-mode overflow-y-auto" id="body">
+    <!-- Header -->
     {% include 'account/header.html' %}
 
+    <!-- Sidebar -->
     {% include 'account/sidebar.html' %}
-    
-        <div class="flex-grow ml-80  mt-10 mr-2 justify-center items-center overflow-y-scroll">
-            {% block content %}
 
-            {%endblock %}
-        </div>
+    <!-- Main Content -->
+    <div class="flex-grow ml-80 mt-10 mr-2 justify-center items-center overflow-y-auto">
+        {% block content %}
+        <!-- Content will be injected here -->
+        {% endblock %}
     </div>
-    
-    <script src="{% static 'js/dark.js' %}"></script>
-    <script src="{% static 'js/login.js' %}"></script>
-    <script src="{% static 'js/main.js' %}"></script>
+
     <script>
+        // Dropdown Menu Toggle
         const dropdownButton = document.getElementById('dropdownButton');
         const dropdownMenu = document.getElementById('dropdownMenu');
+        if (dropdownButton && dropdownMenu) {
+            dropdownButton.addEventListener('click', () => {
+                dropdownMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Sidebar Toggle
         const sidebarToggle = document.getElementById('sidebarToggle');
         const sidebar = document.getElementById('sidebar');
+        if (sidebarToggle && sidebar) {
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('hidden');
+                sidebar.classList.toggle('visible');
+            });
+        }
+
+        // Dark Mode Toggle
         const darkModeToggle = document.getElementById('darkModeToggle');
         const body = document.getElementById('body');
         const header = document.getElementById('header');
+        if (darkModeToggle && body && header) {
+            darkModeToggle.addEventListener('click', () => {
+                body.classList.toggle('dark-mode');
+                header.classList.toggle('dark-mode');
+                const isDarkMode = body.classList.contains('dark-mode');
+                localStorage.setItem('darkMode', isDarkMode);
+                updateDarkModeToggle(isDarkMode);
+            });
 
-        dropdownButton.addEventListener('click', () => {
-            dropdownMenu.classList.toggle('hidden');
-        });
+            // Load dark mode preference on page load
+            document.addEventListener('DOMContentLoaded', () => {
+                const isDarkMode = localStorage.getItem('darkMode') === 'true';
+                if (isDarkMode) {
+                    body.classList.add('dark-mode');
+                    header.classList.add('dark-mode');
+                }
+                updateDarkModeToggle(isDarkMode);
+            });
 
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('hidden');
-            sidebar.classList.toggle('visible');
-        });
-
-        darkModeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            header.classList.toggle('dark-mode');
-            const isDarkMode = body.classList.contains('dark-mode');
-            darkModeToggle.innerHTML = isDarkMode
-                ? '<span class="material-icons">brightness_7</span><span class="ml-2">Light Mode</span>'
-                : '<span class="material-icons">brightness_6</span><span class="ml-2">Dark Mode</span>';
-        });
+            // Update dark mode toggle icon and text
+            function updateDarkModeToggle(isDarkMode) {
+                darkModeToggle.innerHTML = isDarkMode
+                    ? '<span class="material-icons">brightness_7</span><span class="ml-2">Light Mode</span>'
+                    : '<span class="material-icons">brightness_6</span><span class="ml-2">Dark Mode</span>';
+            }
+        }
     </script>
 </body>
 </html>

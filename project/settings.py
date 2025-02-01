@@ -12,13 +12,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+@)_sz#siyuy^lm$$^gtqlgxh1gsyck2m3%!kvr&dh47geud8r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ['*']
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# Application definition
 
 INSTALLED_APPS = [
     'account.apps.AccountConfig',
@@ -116,10 +111,14 @@ LANGUAGES = [
 AUTH_USER_MODEL = 'account.CustomUser'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# settings.py
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Adjust as needed
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'account\\static')
+    os.path.join(BASE_DIR, 'account/static'),  # Your static files directory
 ]
 
 # Default primary key field type

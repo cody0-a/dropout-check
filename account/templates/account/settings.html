@@ -1,23 +1,37 @@
 {% extends 'account/base.html' %}
 
 {% block content %}
-<div class="flex flex-col items-center p-4 settings"> 
-    <label for="settings" class="block mb-2 text-gray-700 font-semibold">Settings</label>
-    <select name="settings" id="settings" class="bg-gray-200 text-gray-800 p-2 rounded-lg shadow focus:outline-none focus:ring focus:ring-blue-400" onchange="handleSelectChange(event)">
+<div class="flex flex-col items-center p-6 bg-white rounded-lg shadow-md max-w-md mx-auto mt-10">
+    <label for="settings" class="block mb-4 text-xl font-bold text-gray-800">Account Settings</label>
+    <select 
+        name="settings" 
+        id="settings" 
+        class="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+        onchange="handleSelectChange(event)"
+    >
         <option value="" disabled selected>Select an option</option>
         <option value="{% url 'change_password' %}">Change Password</option>
         <option value="{% url 'change-email' %}">Change Email</option>
-        <option value="{% url 'account-delete' %}">Delete Account</option>
+        <option value="{% url 'account-delete' %}" class="text-red-600">Delete Account</option>
         <option value="{% url 'logout' %}">Logout</option>
         <option value="{% url 'account_profile' %}">Profile</option>
         <option value="{% url 'change-phone' %}">Change Phone</option>
     </select>
+    <p class="mt-4 text-sm text-gray-500">Choose an option to manage your account settings.</p>
 </div>
 
 <script>
     function handleSelectChange(event) {
         const selectedValue = event.target.value;
         if (selectedValue) {
+            // Confirm before performing destructive actions
+            if (selectedValue.includes('delete') || selectedValue.includes('logout')) {
+                const confirmAction = confirm("Are you sure you want to proceed?");
+                if (!confirmAction) {
+                    event.target.value = ""; // Reset the dropdown
+                    return;
+                }
+            }
             window.location.href = selectedValue; // Redirect to the selected URL
         }
     }

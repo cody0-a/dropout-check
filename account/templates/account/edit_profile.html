@@ -1,0 +1,116 @@
+{% extends "account/base.html" %}
+
+{% block content %}
+<div class="max-w-lg mx-auto mt-10 p-6 bg-white shadow-md rounded-lg dark:bg-gray-800 dark:text-white overflow-y-auto">
+    <h2 class="text-2xl font-bold mb-6 text-center">Edit Profile</h2>
+    <form method="post" enctype="multipart/form-data" class="grid grid-cols-2 gap-4 p-2 m-2 space-y-4 overflow-y-auto">
+        {% csrf_token %}
+        
+        <!-- First Name -->
+        <div class="space-y-2">
+            <label for="{{ form.first_name.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">First Name</label>
+            <input type="text" name="{{ form.first_name.name }}" id="{{ form.first_name.id_for_label }}" 
+                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                   value="{{ form.first_name.value|default_if_none:'' }}" placeholder="First Name">
+            {% if form.first_name.errors %}
+                <div class="text-red-500 text-sm">{{ form.first_name.errors }}</div>
+            {% endif %}
+        </div>
+
+        <!-- Last Name -->
+        <div class="space-y-2">
+            <label for="{{ form.last_name.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Last Name</label>
+            <input type="text" name="{{ form.last_name.name }}" id="{{ form.last_name.id_for_label }}" 
+                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                   value="{{ form.last_name.value|default_if_none:'' }}" placeholder="Last Name">
+            {% if form.last_name.errors %}
+                <div class="text-red-500 text-sm">{{ form.last_name.errors }}</div>
+            {% endif %}
+        </div>
+
+        <!-- Email -->
+        <div class="space-y-2">
+            <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+            <input type="email" name="{{ form.email.name }}" id="{{ form.email.id_for_label }}" 
+                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                   value="{{ form.email.value|default_if_none:'' }}" placeholder="Email">
+            {% if form.email.errors %}
+                <div class="text-red-500 text-sm">{{ form.email.errors }}</div>
+            {% endif %}
+        </div>
+
+        <!-- Phone Number -->
+        <div class="space-y-2">
+            <label for="{{ form.phone_number.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone Number</label>
+            <input type="text" name="{{ form.phone_number.name }}" id="{{ form.phone_number.id_for_label }}" 
+                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                   value="{{ form.phone_number.value|default_if_none:'' }}" placeholder="Phone Number">
+            {% if form.phone_number.errors %}
+                <div class="text-red-500 text-sm">{{ form.phone_number.errors }}</div>
+            {% endif %}
+        </div>
+
+        <!-- Image Upload -->
+        <div class="space-y-2">
+            <label for="{{ form.image.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Profile Image</label>
+            <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}" 
+                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+            {% if form.image.errors %}
+                <div class="text-red-500 text-sm">{{ form.image.errors }}</div>
+            {% endif %}
+        </div>
+
+        <!-- Date of Birth -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date of Birth</label>
+            <div class="flex space-x-2">
+                <div class="w-1/3">
+                    <label for="{{ form.day.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Day</label>
+                    <input type="number" name="{{ form.day.name }}" id="{{ form.day.id_for_label }}" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                           value="{{ form.day.value|default_if_none:'' }}" placeholder="Day" min="1" max="31">
+                    {% if form.day.errors %}
+                        <div class="text-red-500 text-sm">{{ form.day.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="w-1/3">
+                    <label for="{{ form.month.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Month</label>
+                    <input type="number" name="{{ form.month.name }}" id="{{ form.month.id_for_label }}" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                           value="{{ form.month.value|default_if_none:'' }}" placeholder="Month" min="1" max="12">
+                    {% if form.month.errors %}
+                        <div class="text-red-500 text-sm">{{ form.month.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="w-1/3">
+                    <label for="{{ form.year.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Year</label>
+                    <input type="number" name="{{ form.year.name }}" id="{{ form.year.id_for_label }}" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                           value="{{ form.year.value|default_if_none:'' }}" placeholder="Year" min="1900" max="{{ current_year }}">
+                    {% if form.year.errors %}
+                        <div class="text-red-500 text-sm">{{ form.year.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sex -->
+        <div class="space-y-2">
+            <label for="{{ form.sex.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sex</label>
+            <select name="{{ form.sex.name }}" id="{{ form.sex.id_for_label }}" 
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                <option value="Male" {% if form.sex.value == "Male" %}selected{% endif %}>Male</option>
+                <option value="Female" {% if form.sex.value == "Female" %}selected{% endif %}>Female</option>
+            </select>
+            {% if form.sex.errors %}
+                <div class="text-red-500 text-sm">{{ form.sex.errors }}</div>
+            {% endif %}
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300">
+            Save
+        </button>
+    </form>
+</div>
+{% endblock %}

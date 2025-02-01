@@ -33,6 +33,7 @@ class StudentAdmin(admin.ModelAdmin):
             return []
         else:
             return ('dropout',)
+        
 @admin.register(SchoolProfile)
 class SchoolProfileAdmin(admin.ModelAdmin):
     list_filter =['name','phone','email']

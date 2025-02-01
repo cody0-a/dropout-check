@@ -1,0 +1,14 @@
+{% extends 'account/base.html'%}
+
+{% block content %}
+    <div>
+        <form action="/csv/" enctype="multipart/form-data">
+            <div>
+                <h2>import csv file to convert to html table</h2>
+            </div>
+            <label for="csv">upload</label>
+            <input type="file" name="csv" id="csv">
+            <input type="submit">
+        </form>
+    </div>
+{% endblock %}
